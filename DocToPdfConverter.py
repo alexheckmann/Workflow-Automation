@@ -9,6 +9,7 @@ def doc_to_pdf(_in, _out):
     pdf_format = 17
     file_in = os.path.abspath(_in)
     file_out = os.path.abspath(_out)
+
     try:
         worddoc = comtypes.client.CreateObject('Word.Application')
         doc = worddoc.Documents.open(file_in)
