@@ -25,7 +25,7 @@ for file in os.listdir(destination):
     in_filename = destination + "\\" + file
     file_extension = os.path.splitext(in_filename)[-1].lower()
 
-    if file_extension == ".docx":
+    if ".doc" in file_extension:
         out_filename = destination + "\\" + str(file).rstrip(".docx") + ".pdf"
         doc_to_pdf(in_filename, out_filename)
     else:
