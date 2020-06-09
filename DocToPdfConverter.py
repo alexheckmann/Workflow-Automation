@@ -37,26 +37,27 @@ def doc_to_pdf(_in, _out):
 
 @retry(5)
 def batch_conversion():
-    try:
+    if len(sys.argv) > 1:
         destination = sys.argv[1]
-    except IndexError:
-        destination = input("Please enter an absolute path to your destination folder:\n")
-    finally:
-        while True:
-            try:
-                for file in os.listdir(destination):
-                    in_filename = destination + "\\" + file
-                    file_extension = os.path.splitext(in_filename)[-1].lower()
+    else:
+        destination = input("Please enter the destination folder:\n")
 
-                    if ".doc" in file_extension:
-                        out_filename = destination + "\\" + str(file).rstrip(".docx") + ".pdf"
-                        doc_to_pdf(in_filename, out_filename)
-                    else:
-                        continue
-                break
+        for file in os.listdir(destination):
+            in_filename = destination + "\\" + file
+            file_extension = os.path.splitext(in_filename)[-1].lower()
+            out_filename = destination + "\\" + str(file).rstrip(".docx") + ".pdf"
 
-            except OSError:
-                destination = input("Please enter a valid path:\n")
+            if ".docx" in file_extension:
+                pdf_filename = str(file).rstrip(".docx") + ".pdf"
+                pdf_exists = pdf_filename in os.listdir(destination)
+                if pdf_exists:
+                    print("PDF version of \"" + str(file) + "\" already exists")
+                else:
+                    doc_to_pdf(in_filename, out_filename)
+                    print("PDF version of " + str(file) + " created")
+            else:
+                continue
 
 
 batch_conversion()
+print("\nExceeded number of maximum attempts, exiting script")
