@@ -14,6 +14,8 @@ def retry(max_attempts):
                     return func()
                 except:
                     attempts += 1
+            if attempts == max_attempts:
+                print("\nExceeded number of maximum attempts, exiting script")
 
         return f
 
@@ -60,4 +62,3 @@ def batch_conversion():
 
 
 batch_conversion()
-print("\nExceeded number of maximum attempts, exiting script")
