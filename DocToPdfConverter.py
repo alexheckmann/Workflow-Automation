@@ -54,7 +54,7 @@ def batch_conversion():
                 print("PDF version of \"" + str(file) + "\" already exists")
             else:
                 doc_to_pdf(in_filename, out_filename)
-                print("PDF version of " + str(file) + " created")
+                print("PDF version of \"" + str(file) + "\" created")
         else:
             continue
 
