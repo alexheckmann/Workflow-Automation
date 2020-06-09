@@ -5,6 +5,21 @@ from _ctypes import COMError
 import comtypes.client
 
 
+def retry(max_attempts):
+    def tryIt(func):
+        def f():
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    return func()
+                except:
+                    attempts += 1
+
+        return f
+
+    return tryIt
+
+
 def doc_to_pdf(_in, _out):
     pdf_format = 17
     file_in = os.path.abspath(_in)
@@ -20,13 +35,28 @@ def doc_to_pdf(_in, _out):
         print("Could not read file:" + str(file_in))
 
 
-destination = sys.argv[1]
-for file in os.listdir(destination):
-    in_filename = destination + "\\" + file
-    file_extension = os.path.splitext(in_filename)[-1].lower()
+@retry(5)
+def batch_conversion():
+    try:
+        destination = sys.argv[1]
+    except IndexError:
+        destination = input("Please enter an absolute path to your destination folder:\n")
+    finally:
+        while True:
+            try:
+                for file in os.listdir(destination):
+                    in_filename = destination + "\\" + file
+                    file_extension = os.path.splitext(in_filename)[-1].lower()
 
-    if ".doc" in file_extension:
-        out_filename = destination + "\\" + str(file).rstrip(".docx") + ".pdf"
-        doc_to_pdf(in_filename, out_filename)
-    else:
-        continue
+                    if ".doc" in file_extension:
+                        out_filename = destination + "\\" + str(file).rstrip(".docx") + ".pdf"
+                        doc_to_pdf(in_filename, out_filename)
+                    else:
+                        continue
+                break
+
+            except OSError:
+                destination = input("Please enter a valid path:\n")
+
+
+batch_conversion()
