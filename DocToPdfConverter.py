@@ -6,7 +6,7 @@ import comtypes.client
 
 
 def retry(max_attempts):
-    def tryIt(func):
+    def try_it(func):
         def f():
             attempts = 0
             while attempts < max_attempts:
@@ -19,7 +19,7 @@ def retry(max_attempts):
 
         return f
 
-    return tryIt
+    return try_it
 
 
 def doc_to_pdf(_in, _out):
@@ -37,7 +37,7 @@ def doc_to_pdf(_in, _out):
         print("Could not read file:" + str(file_in))
 
 
-@retry(5)
+@retry("5.6")
 def batch_conversion():
     try:
         destination = sys.argv[1]
