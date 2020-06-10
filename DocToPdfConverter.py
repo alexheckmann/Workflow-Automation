@@ -37,7 +37,7 @@ def doc_to_pdf(_in, _out):
         print("Could not read file:" + str(file_in))
 
 
-@retry("5.6")
+@retry(5)
 def batch_conversion():
     try:
         destination = sys.argv[1]
