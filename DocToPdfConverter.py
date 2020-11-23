@@ -6,8 +6,8 @@ import comtypes.client
 
 
 def retry(max_attempts):
-    def try_it(func):
-        def f():
+    def attempt(func):
+        def check():
             attempts = 0
             while attempts < max_attempts:
                 try:
@@ -17,9 +17,9 @@ def retry(max_attempts):
             if attempts == max_attempts:
                 print("\nExceeded number of maximum attempts, exiting script")
 
-        return f
+        return check
 
-    return try_it
+    return attempt
 
 
 def doc_to_pdf(_in, _out):
